@@ -37,6 +37,15 @@ SELECT SUM(escape_attempts), neutered FROM animals GROUP BY (neutered);
 SELECT MAX(weight_kg), MIN(weight_kg), species FROM animals GROUP BY (species);
 SELECT species, AVG(escape_attempts) FROM animals WHERE date_of_birth BETWEEN '1990-1-1' AND '2000-12-31' GROUP BY(species);
 
+UPDATE animals SET species_id = 1 WHERE name LIKE '%mon';
+UPDATE animals SET species_id = 2 WHERE name NOT LIKE '%mon';
+
+UPDATE animals SET owner_id = 1 WHERE name = 'Agumon'; 
+UPDATE animals SET owner_id = 2 WHERE name IN ('Gabumon', 'Pikachu'); 
+UPDATE animals SET owner_id = 3 WHERE name IN ('Devimon', 'Plantmon');
+UPDATE animals SET owner_id = 4 WHERE name IN ('Charmander', 'Squirtile', 'Blossom');
+UPDATE animals SET owner_id = 5 WHERE name IN ('Angemon', 'Boarmon');
+
 SELECT name FROM animals JOIN owners ON owners.id = animals.owner_id WHERE owners.full_name = 'Melody Pond';
 SELECT * FROM animals JOIN species ON species.id = animals.species_id WHERE species.name = 'Pokemon';
 SELECT full_name, name FROM owners LEFT JOIN animals ON animals.owner_id = owners.id;
