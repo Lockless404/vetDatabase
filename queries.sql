@@ -11,31 +11,23 @@ SELECT * FROM animals WHERE weight_kg >=10.4 AND weight_kg <= 17.3;
 
 BEGIN;
 UPDATE animals SET species = 'unspecified';
-SELECT * FROM animals;
 ROLLBACK;
 
 BEGIN;
 UPDATE animals SET species='digimon' WHERE name LIKE '%mon';
-SELECT * FROM animals;
 UPDATE animals SET species='pokemon' WHERE species is NULL;
-SELECT * FROM animals;
 COMMIT;
 
 BEGIN;
 DELETE FROM animals;
-SELECT * FROM animals;
 ROLLBACK;
 
 BEGIN;
 DELETE FROM animals WHERE date_of_birth > '2022-1-1';
-SELECT * FROM animals;
 SAVEPOINT FIRST;
 UPDATE animals SET weight_kg= weight_kg * -1;
-SELECT * FROM animals;
 ROLLBACK TO SAVEPOINT FIRST;
-SELECT * FROM animals;
 UPDATE animals SET weight_kg= weight_kg * -1 WHERE weight_kg < 0;
-SELECT * FROM animals;
 COMMIT;
 
 SELECT COUNT(*) FROM animals;
@@ -44,3 +36,11 @@ SELECT AVG(weight_kg) FROM animals;
 SELECT SUM(escape_attempts), neutered FROM animals GROUP BY (neutered);
 SELECT MAX(weight_kg), MIN(weight_kg), species FROM animals GROUP BY (species);
 SELECT species, AVG(escape_attempts) FROM animals WHERE date_of_birth BETWEEN '1990-1-1' AND '2000-12-31' GROUP BY(species);
+
+SELECT name FROM animals JOIN owners ON owners.id = animals.owner_id WHERE owners.full_name = 'Melody Pond';
+SELECT * FROM animals JOIN species ON species.id = animals.species_id WHERE species.name = 'Pokemon';
+SELECT full_name, name FROM owners LEFT JOIN animals ON animals.owner_id = owners.id;
+SELECT species.name, COUNT(animals.name) FROM animals JOIN species ON species.id = animals.species_id GROUP BY species.name;
+SELECT animals.name FROM animals JOIN species ON species.id = animals.species_id JOIN owners ON owners.id = animals.owner_id WHERE owners.full_name = 'Jenniffer Orwell' AND species.name = 'Digimon';
+SELECT animals.name FROM animals JOIN owners ON owners.id = animals.owner_id WHERE animals.escape_attempts = 0 AND owners.full_name = 'Dean Winchester';
+SELECT COUNT(owners.full_name), owners.full_name FROM animals JOIN owners ON owners.id = animals.owner_id GROUP BY owners.full_name ORDER BY COUNT(owners.full_name) DESC;
